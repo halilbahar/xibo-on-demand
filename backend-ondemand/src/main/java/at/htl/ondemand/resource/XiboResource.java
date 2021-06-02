@@ -1,9 +1,11 @@
 package at.htl.ondemand.resource;
 
+import at.htl.ondemand.model.form.EmbeddedForm;
 import at.htl.ondemand.model.xibo.Display;
+import at.htl.ondemand.model.xibo.Layout;
 import at.htl.ondemand.model.xibo.Media;
+import at.htl.ondemand.service.EmbeddedService;
 import at.htl.ondemand.service.XiboService;
-import io.smallrye.mutiny.Uni;
 
 import javax.inject.Inject;
 import javax.ws.rs.*;
@@ -18,6 +20,9 @@ public class XiboResource {
 
     @Inject
     XiboService xiboService;
+
+    @Inject
+    EmbeddedService embeddedService;
 
     @GET
     @Path("display")
@@ -50,8 +55,10 @@ public class XiboResource {
         // Check if video exists
         boolean videoIdValid = false;
         List<Media> videos = this.xiboService.getVideos();
+        Media selectedVideo = null;
         for (Media video : videos) {
             if (video.mediaId.equals(videoId)) {
+                selectedVideo = video;
                 videoIdValid = true;
                 break;
             }
@@ -61,7 +68,16 @@ public class XiboResource {
         }
 
         // If everything is valid schedule
+        // First create a layout
+        Layout layout = this.xiboService.createLayout();
 
-        return Response.noContent().build();
+        // Then create a embedded with the correct video
+        EmbeddedForm embeddedForm = this.embeddedService.generateEmbeddedHtml(videoId, selectedVideo.duration);
+        this.xiboService.createEmbeddedHtml(layout.regions.get(0).regionPlaylist.playlistId, embeddedForm);
+
+        // Finally schedule the overlay
+
+//        return Response.noContent().build();
+        return Response.ok(layout).build();
     }
 }
