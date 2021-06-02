@@ -16,15 +16,18 @@ To update the state of the preconfigured xibo you have to first make your change
 
 [source, bash]
 ----
-docker exec -i webclient-cms-db /usr/bin/mysqldump \ <1>
-    -u cms \ <2>
-    --pasword=password \ <3>
-    cms > xibo.sql <4>
+docker exec -i on-demand-cms-db /usr/bin/mysqldump \
+    -u cms \
+    --password=password \
+    --no-tablespaces \
+    cms > xibo.sql
 ----
-<1> Execute `mysqldump` in the database container
-<2> User `cms`
-<3> Passowrd `password`
-<4> Database `cms`. Pipe the output
+
+This command does the following:
+
+* It uses the docker exec to go into a container and execute `mysqldump`.
+* specifies the user `cms` with the password `password`
+* and pipes the output to `xibo.sql`
 
 If you upload any new media to the library you have to exclude this file in the `.gitignore`. The name of the file will be the `<id>.<extension>`.
 For example `23.mp4`.
