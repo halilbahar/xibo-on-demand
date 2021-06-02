@@ -25,3 +25,6 @@ docker exec -i webclient-cms-db /usr/bin/mysqldump \ <1>
 <2> User `cms`
 <3> Passowrd `password`
 <4> Database `cms`. Pipe the output
+
+If you upload any new media to the library you have to exclude this file in the `.gitignore`. The name of the file will be the `<id>.<extension>`.
+For example `23.mp4`.
