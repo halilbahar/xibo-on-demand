@@ -1,5 +1,8 @@
-package at.htl.resource;
+package at.htl.ondemand.resource;
 
+import at.htl.ondemand.service.XiboService;
+
+import javax.inject.Inject;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
@@ -9,10 +12,13 @@ import javax.ws.rs.core.Response;
 @Produces(MediaType.APPLICATION_JSON)
 public class XiboResource {
 
+    @Inject
+    XiboService xiboService;
+
     @GET
     @Path("display")
     public Response getDisplays() {
-        return null;
+        return Response.ok(this.xiboService.getDisplays()).build();
     }
 
     @GET
