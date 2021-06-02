@@ -23,5 +23,5 @@ public interface XiboRestClient {
     @Path("display")
     @Produces(MediaType.APPLICATION_JSON)
     @XiboAuthentication
-    List<Display> getDisplays();
+    List<Display> getDisplays(@QueryParam("tags") String tags);
 }
