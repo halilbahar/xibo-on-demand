@@ -77,8 +77,8 @@ public class XiboResource {
         this.xiboService.publishLayout(layout.parentId);
 
         // Finally schedule the overlay
+        this.xiboService.scheduleOverlay(layout.campaignId, displayId);
 
-//        return Response.noContent().build();
-        return Response.ok(layout).build();
+        return Response.noContent().build();
     }
 }

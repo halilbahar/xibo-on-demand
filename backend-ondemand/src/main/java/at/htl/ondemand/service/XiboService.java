@@ -2,6 +2,7 @@ package at.htl.ondemand.service;
 
 import at.htl.ondemand.model.form.EmbeddedForm;
 import at.htl.ondemand.model.form.LayoutForm;
+import at.htl.ondemand.model.form.ScheduleForm;
 import at.htl.ondemand.model.xibo.Display;
 import at.htl.ondemand.model.xibo.Layout;
 import at.htl.ondemand.model.xibo.Media;
@@ -52,5 +53,9 @@ public class XiboService {
     public void createEmbeddedHtml(Long playlistId, EmbeddedForm embeddedForm) {
         Widget widget = this.xiboRestClient.createWidget("embedded", playlistId);
         this.xiboRestClient.updateEmbedded(widget.widgetId, embeddedForm);
+    }
+
+    public void scheduleOverlay(Long campaignId, Long displayId) {
+        this.xiboRestClient.scheduleOverlay(new ScheduleForm(String.valueOf(campaignId), String.valueOf(displayId)));
     }
 }

@@ -3,6 +3,7 @@ package at.htl.ondemand.service;
 import at.htl.ondemand.interceptor.XiboAuthentication;
 import at.htl.ondemand.model.form.EmbeddedForm;
 import at.htl.ondemand.model.form.LayoutForm;
+import at.htl.ondemand.model.form.ScheduleForm;
 import at.htl.ondemand.model.form.XiboTokenForm;
 import at.htl.ondemand.model.xibo.*;
 import org.eclipse.microprofile.rest.client.inject.RegisterRestClient;
@@ -49,6 +50,12 @@ public interface XiboRestClient {
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
     @XiboAuthentication
     void publishLayout(@PathParam("layoutId") Long layoutId, @FormParam("publishNow") int publishNow);
+
+    @POST
+    @Path("schedule")
+    @Consumes(MediaType.MULTIPART_FORM_DATA)
+    @XiboAuthentication
+    void scheduleOverlay(@MultipartForm ScheduleForm data);
 
     @POST
     @Path("playlist/widget/{type}/{playlistId}")
