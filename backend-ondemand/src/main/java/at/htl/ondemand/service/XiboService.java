@@ -20,12 +20,16 @@ public class XiboService {
     @ConfigProperty(name = "on-demand.display-tag")
     Optional<String> displayTags;
 
+    @ConfigProperty(name = "on-demand.media-tag")
+    Optional<String> mediaTags;
+
     public List<Display> getDisplays() {
         String displayTags = this.displayTags.orElse("");
         return this.xiboRestClient.getDisplays(displayTags);
     }
 
     public List<Media> getVideos() {
-        return this.xiboRestClient.searchLibrary("video");
+        String mediaTags = this.mediaTags.orElse("");
+        return this.xiboRestClient.searchLibrary("video", mediaTags);
     }
 }

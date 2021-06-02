@@ -30,5 +30,5 @@ public interface XiboRestClient {
     @Path("library")
     @Produces(MediaType.APPLICATION_JSON)
     @XiboAuthentication
-    List<Media> searchLibrary(@QueryParam("type") String type);
+    List<Media> searchLibrary(@QueryParam("type") String type, @QueryParam("tags") String tags);
 }
