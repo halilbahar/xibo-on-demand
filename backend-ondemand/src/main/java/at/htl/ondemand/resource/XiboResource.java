@@ -24,11 +24,11 @@ public class XiboResource {
     @GET
     @Path("video")
     public Response getVideos() {
-        return null;
+        return Response.ok(this.xiboService.getVideos()).build();
     }
 
     @POST
-    @Path("video")
+    @Path("schedule")
     public Response scheduleVideo() {
         return null;
     }

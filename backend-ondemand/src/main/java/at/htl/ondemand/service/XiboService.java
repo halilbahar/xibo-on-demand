@@ -1,6 +1,7 @@
 package at.htl.ondemand.service;
 
 import at.htl.ondemand.model.xibo.Display;
+import at.htl.ondemand.model.xibo.Media;
 import org.eclipse.microprofile.config.inject.ConfigProperty;
 import org.eclipse.microprofile.rest.client.inject.RestClient;
 
@@ -22,5 +23,9 @@ public class XiboService {
     public List<Display> getDisplays() {
         String displayTags = this.displayTags.orElse("");
         return this.xiboRestClient.getDisplays(displayTags);
+    }
+
+    public List<Media> getVideos() {
+        return this.xiboRestClient.searchLibrary("video");
     }
 }

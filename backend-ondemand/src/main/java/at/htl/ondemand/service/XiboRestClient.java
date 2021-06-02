@@ -3,6 +3,7 @@ package at.htl.ondemand.service;
 import at.htl.ondemand.interceptor.XiboAuthentication;
 import at.htl.ondemand.model.form.XiboTokenForm;
 import at.htl.ondemand.model.xibo.Display;
+import at.htl.ondemand.model.xibo.Media;
 import at.htl.ondemand.model.xibo.XiboToken;
 import org.eclipse.microprofile.rest.client.inject.RegisterRestClient;
 import org.jboss.resteasy.annotations.providers.multipart.MultipartForm;
@@ -24,4 +25,10 @@ public interface XiboRestClient {
     @Produces(MediaType.APPLICATION_JSON)
     @XiboAuthentication
     List<Display> getDisplays(@QueryParam("tags") String tags);
+
+    @GET
+    @Path("library")
+    @Produces(MediaType.APPLICATION_JSON)
+    @XiboAuthentication
+    List<Media> searchLibrary(@QueryParam("type") String type);
 }
