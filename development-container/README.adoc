@@ -1,0 +1,27 @@
+= Docker container for development
+
+This docker compose will reduce the time of setting up a development environment. It has a preconfigured xibo in it:
+
+== Application
+
+* `Client Id`: `jgm9CsI60TstOhrTBCwYbnrTqVBy7btOF34Dt2u7`
+* `Client Secret`: `1yZE6eNSqryMlvuILrV7MmWCN7adEfelULYpd6dt7v09GUjNln2U2uvvA7MWBviGnCx2YetqUw83oA04uQmRh2amRg5LnltvUS2zvdzUJ24CxMwDJZ6YqtTttfxV9fj6zKeUxBDg3mUrQJ0lGw8FrzvnJW7Wt54pwpCdWPcasKZAT81jks9lzjBWsqSfcLQmjKXqM7T5l2tqhSRKefJu78doqgtcGZ7RBbKMyfGzNJtt2PXzhLdKKnqoL6xEly`
+
+== Media
+
+* `example.mp4`
+
+== Update the state
+To update the state of the preconfigured xibo you have to first make your changes and after that do the following:
+
+[source, bash]
+----
+docker exec -i webclient-cms-db /usr/bin/mysqldump \ <1>
+    -u cms \ <2>
+    --pasword=password \ <3>
+    cms > xibo.sql <4>
+----
+<1> Execute `mysqldump` in the database container
+<2> User `cms`
+<3> Passowrd `password`
+<4> Database `cms`. Pipe the output
