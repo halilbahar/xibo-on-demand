@@ -74,6 +74,7 @@ public class XiboResource {
         // Then create a embedded with the correct video
         EmbeddedForm embeddedForm = this.embeddedService.generateEmbeddedHtml(videoId, selectedVideo.duration);
         this.xiboService.createEmbeddedHtml(layout.regions.get(0).regionPlaylist.playlistId, embeddedForm);
+        this.xiboService.publishLayout(layout.parentId);
 
         // Finally schedule the overlay
 

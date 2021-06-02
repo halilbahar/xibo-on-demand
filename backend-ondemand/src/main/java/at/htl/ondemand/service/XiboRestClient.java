@@ -44,6 +44,12 @@ public interface XiboRestClient {
     @XiboAuthentication
     Layout createLayout(@MultipartForm LayoutForm data);
 
+    @PUT
+    @Path("layout/publish/{layoutId}")
+    @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
+    @XiboAuthentication
+    void publishLayout(@PathParam("layoutId") Long layoutId, @FormParam("publishNow") int publishNow);
+
     @POST
     @Path("playlist/widget/{type}/{playlistId}")
     @XiboAuthentication

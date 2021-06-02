@@ -45,6 +45,9 @@ public class XiboService {
         return this.xiboRestClient.getChildLayout(layout.layoutId, "regions,playlists,widgets").get(0);
     }
 
+    public void publishLayout(Long layoutId) {
+        this.xiboRestClient.publishLayout(layoutId, 1);
+    }
 
     public void createEmbeddedHtml(Long playlistId, EmbeddedForm embeddedForm) {
         Widget widget = this.xiboRestClient.createWidget("embedded", playlistId);

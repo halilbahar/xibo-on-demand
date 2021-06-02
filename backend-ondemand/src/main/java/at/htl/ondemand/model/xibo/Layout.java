@@ -4,5 +4,6 @@ import java.util.List;
 
 public class Layout {
     public Long layoutId;
+    public Long parentId;
     public List<Region> regions;
 }
