@@ -89,6 +89,11 @@ public class XiboResource {
             return Response.status(Response.Status.NOT_FOUND).build();
         }
 
+        // Check if the display is occupied
+        if (this.sessionService.isDisplayInSession(displayId)) {
+            return Response.status(Response.Status.CONFLICT).build();
+        }
+
         // If everything is valid schedule
         // First create a layout
         Layout layout = this.xiboService.createLayout();

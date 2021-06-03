@@ -6,6 +6,8 @@ import at.htl.ondemand.model.OverlaySession;
 import at.htl.ondemand.model.SessionState;
 import org.eclipse.microprofile.reactive.messaging.Channel;
 import org.eclipse.microprofile.reactive.messaging.Emitter;
+import org.eclipse.microprofile.reactive.messaging.Incoming;
+import org.eclipse.microprofile.reactive.messaging.Outgoing;
 import org.jboss.logging.Logger;
 
 import javax.annotation.PostConstruct;
@@ -33,7 +35,7 @@ public class SessionService {
     XiboService xiboService;
 
     @Inject
-    @Channel("display-event")
+    @Channel("display-event-emitter")
     Emitter<DisplayEvent> displayEventEmitter;
 
     @PostConstruct
@@ -85,6 +87,22 @@ public class SessionService {
     public void removeLayout(OverlaySession session) {
         this.xiboService.deleteLayout(session.layoutId);
         this.displayEventEmitter.send(new DisplayEvent(session, DisplayEventType.DELETE));
+    }
+
+    public boolean isDisplayInSession(Long displayId) {
+        for (Map.Entry<UUID, OverlaySession> uuidOverlaySessionEntry : this.sessions.entrySet()) {
+            if (uuidOverlaySessionEntry.getValue().displayId.equals(displayId)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    @Incoming("display-event-emitter")
+    @Outgoing("display-event")
+    public DisplayEvent processEvent(DisplayEvent event) {
+        return event;
     }
 
     private class SessionTimer implements Runnable {
