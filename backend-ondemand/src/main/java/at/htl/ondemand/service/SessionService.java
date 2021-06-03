@@ -1,12 +1,14 @@
 package at.htl.ondemand.service;
 
 import at.htl.ondemand.model.OverlaySession;
+import at.htl.ondemand.model.SessionState;
 import org.jboss.logging.Logger;
 
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 import java.time.LocalDateTime;
+import java.util.Iterator;
 import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
@@ -23,10 +25,14 @@ public class SessionService {
     @Inject
     volatile Logger log;
 
+    @Inject
+    XiboService xiboService;
+
     @PostConstruct
-    private void init() {
+    void init() {
+        System.out.println("this is bad if seen twice");
         ScheduledExecutorService executor = Executors.newScheduledThreadPool(1);
-        executor.scheduleAtFixedRate(new SessionTimer(), 0, 1, TimeUnit.MINUTES);
+        executor.scheduleAtFixedRate(new SessionTimer(), 0, 1, TimeUnit.SECONDS);
     }
 
     public void addSession(Long layoutId, UUID uuid, Integer duration) {
@@ -36,12 +42,23 @@ public class SessionService {
     public boolean getAndFinishSession(String uuidString) {
         UUID uuid = UUID.fromString(uuidString);
 
-        if (!this.sessions.containsKey(uuid)) {
+        OverlaySession overlaySession = this.sessions.get(uuid);
+        if (overlaySession == null) {
             return false;
         }
 
-        this.sessions.remove(uuid);
-        return true;
+        // This is the first request from the player. After this the player is playing the video
+        if (overlaySession.state == SessionState.INITIAL) {
+            overlaySession.state = SessionState.STARTED;
+            return true;
+        }
+
+        // If the player requests again after initial he will be started or finished. Either way he should not play again
+        if (overlaySession.state == SessionState.STARTED) {
+            overlaySession.state = SessionState.FINISHED;
+        }
+
+        return false;
     }
 
     private class SessionTimer implements Runnable {
@@ -50,11 +67,18 @@ public class SessionService {
             LocalDateTime now = LocalDateTime.now();
 
             // If something got schedule but never got in touch with the server, remove it later
-            SessionService.this.sessions.entrySet().removeIf(entry -> entry.getValue().createdAt
-                    .plusSeconds(entry.getValue().duration)
-                    .plusMinutes(10)
-                    .isBefore(now)
-            );
+            Iterator<Map.Entry<UUID, OverlaySession>> iterator = SessionService.this.sessions.entrySet().iterator();
+            while (iterator.hasNext()) {
+                Map.Entry<UUID, OverlaySession> entry = iterator.next();
+                OverlaySession overlaySession = entry.getValue();
+                if (overlaySession.state == SessionState.FINISHED || overlaySession.createdAt
+                        .plusSeconds(overlaySession.duration)
+                        .plusMinutes(10)
+                        .isBefore(now)) {
+                    iterator.remove();
+                    SessionService.this.xiboService.deleteLayout(overlaySession.layoutId);
+                }
+            }
 
             String collect = SessionService.this.sessions.keySet().stream().map(UUID::toString).collect(Collectors.joining(" "));
             SessionService.this.log.infov("Current Session [{0}]", collect);
