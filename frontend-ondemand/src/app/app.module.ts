@@ -6,10 +6,14 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { ConfigService } from './core/services/config.service';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { MediaListComponent } from './pages/media-list/media-list.component';
+import { DisplayListComponent } from './pages/display-list/display-list.component';
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+    MediaListComponent,
+    DisplayListComponent
   ],
   imports: [
     BrowserModule,
