@@ -1,5 +1,7 @@
-<mat-card class="grid-item" *ngFor="let display of displays" matRipple (click)="selectDisplay(display)">
-    <mat-card-header>
-        <mat-card-title>{{ display.display }}</mat-card-title>
-    </mat-card-header>
-</mat-card>
+<div class="display-grid">
+    <mat-card class="grid-item" *ngFor="let display of displays" matRipple (click)="selectDisplay(display)">
+        <mat-card-header>
+            <mat-card-title>{{ display.display }}</mat-card-title>
+        </mat-card-header>
+    </mat-card>
+</div>
