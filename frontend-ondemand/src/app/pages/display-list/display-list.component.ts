@@ -57,6 +57,6 @@ export class DisplayListComponent implements OnInit, OnDestroy {
   }
 
   removeSchedule(display: Display): void {
-    this.apiService.deleteSchedule(display.uuid).subscribe();
+    this.apiService.deleteSchedule(display.displayId).subscribe();
   }
 }
