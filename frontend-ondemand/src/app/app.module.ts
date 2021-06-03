@@ -12,12 +12,14 @@ import { AppComponent } from './app.component';
 import { ConfigService } from './core/services/config.service';
 import { DisplayListComponent } from './pages/display-list/display-list.component';
 import { MediaListComponent } from './pages/media-list/media-list.component';
+import { ScheduleDialogComponent } from './components/schedule-dialog/schedule-dialog.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     MediaListComponent,
-    DisplayListComponent
+    DisplayListComponent,
+    ScheduleDialogComponent
   ],
   imports: [
     BrowserModule,
