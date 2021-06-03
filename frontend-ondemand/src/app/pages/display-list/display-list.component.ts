@@ -25,7 +25,9 @@ export class DisplayListComponent implements OnInit {
   }
 
   selectDisplay(display: Display): void {
-    this.selectedDisplayService.display.next(display);
-    this.router.navigate(['media']);
+    if (display.session == null) {
+      this.selectedDisplayService.display.next(display);
+      this.router.navigate(['media']);
+    }
   }
 }

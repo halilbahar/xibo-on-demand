@@ -1,7 +1,19 @@
 <div class="display-grid">
-    <mat-card class="grid-item" *ngFor="let display of displays" matRipple (click)="selectDisplay(display)">
+    <mat-card class="grid-item" *ngFor="let display of displays" (click)="selectDisplay(display)" matRipple
+        [matRippleDisabled]="display.session != null">
         <mat-card-header>
             <mat-card-title>{{ display.display }}</mat-card-title>
         </mat-card-header>
+        <mat-card-content *ngIf="display.session != null">
+            <ng-container *ngIf="display.session.state === 'INITIAL'">
+                This display is about to start
+            </ng-container>
+            <ng-container *ngIf="display.session.state === 'STARTED'">
+                This display is currently running your selected video
+            </ng-container>
+            <ng-container *ngIf="display.session.state === 'FINISHED'">
+                This display has finished and will be soon avaible again
+            </ng-container>
+        </mat-card-content>
     </mat-card>
 </div>
