@@ -1,5 +1,6 @@
 <div style="height: 100%; width: 100%;">
-    <video style="height: 100%; width: 100%; object-fit: cover; display: none;" src="[{{media-id}}]" id="video" autoplay muted></video>
+    <video style="height: 100%; width: 100%; object-fit: cover; display: none;" src="[{{media-id}}]" id="video" autoplay
+           muted></video>
 </div>
 <script>
     window.onload = function () {
@@ -7,7 +8,7 @@
         var video = document.getElementById("video");
 
         var request = new XMLHttpRequest();
-        request.onreadystatechange = function() {
+        request.onreadystatechange = function () {
             if (this.readyState == 4 && this.status == 204) {
                 video.muted = false;
                 video.style.display = "block";
@@ -16,5 +17,13 @@
 
         request.open("GET", url, true);
         request.send();
+
+        video.addEventListener('ended', function () {
+            var finishedRequest = new XMLHttpRequest();
+            finishedRequest.onreadystatechange = function () {};
+
+            finishedRequest.open("GET", url, true);
+            finishedRequest.send();
+        });
     }
 </script>
