@@ -2,6 +2,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { APP_INITIALIZER, NgModule } from '@angular/core';
 import { MatCardModule } from '@angular/material/card';
 import { MatRippleModule } from '@angular/material/core';
+import { MatListModule } from '@angular/material/list';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -25,7 +26,8 @@ import { MediaListComponent } from './pages/media-list/media-list.component';
     BrowserAnimationsModule,
     MatToolbarModule,
     MatCardModule,
-    MatRippleModule
+    MatRippleModule,
+    MatListModule
   ],
   providers: [
     {

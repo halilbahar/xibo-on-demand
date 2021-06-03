@@ -1,1 +1,9 @@
-<p>media-list works!</p>
+<mat-list role="list">
+    <ng-container *ngFor="let video of videos; let i = index">
+        <mat-list-item role="listitem" matRipple>
+            <div matLine>{{ video.fileName }}</div>
+            <div matLine>{{ formatDuration(video.duration) }}</div>
+        </mat-list-item>
+        <mat-divider *ngIf="i !== videos.length - 1"></mat-divider>
+    </ng-container>
+</mat-list>
