@@ -1,0 +1,10 @@
+= Xibo on demand
+
+With this project you can instantly overlay a video over your currently running layout.
+This way you don't have to schedule something if you want to show something once.
+
+== How it works
+
+On the frontend you have to ability to select a display and a video and it gets schedule. The backend creates a layout with 1 region and 1 `embedded` widget and in that embedded is a html page with a `uuid`. This html page requests instantly to the backend. This way the backend knows that the video started and can distinguish between multiple requests as all of them have a unique `uuid`. When the page request for the second time (either at the end of the video or on the second itteration) the backend deletes the layout thus deleting it from the schedule calender.
+
+With this solution the videos will be shown smoothly and without refreshing at the beginnen.
