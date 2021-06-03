@@ -7,6 +7,7 @@ import at.htl.ondemand.model.xibo.Media;
 import at.htl.ondemand.service.EmbeddedService;
 import at.htl.ondemand.service.SessionService;
 import at.htl.ondemand.service.XiboService;
+import org.jboss.resteasy.annotations.cache.NoCache;
 
 import javax.inject.Inject;
 import javax.ws.rs.*;
@@ -91,6 +92,7 @@ public class XiboResource {
 
     @GET
     @Path("{uuid}")
+    @NoCache
     public Response validateUUID(@PathParam("uuid") String uuidString) {
         if (this.sessionService.getAndFinishSession(uuidString)) {
             return Response.noContent().build();
