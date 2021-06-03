@@ -1,5 +1,6 @@
 package at.htl.ondemand.service;
 
+import at.htl.ondemand.model.OverlaySession;
 import at.htl.ondemand.model.form.EmbeddedForm;
 import at.htl.ondemand.model.form.LayoutForm;
 import at.htl.ondemand.model.form.ScheduleForm;
@@ -15,7 +16,9 @@ import javax.inject.Inject;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
+import java.util.UUID;
 
 @ApplicationScoped
 public class XiboService {
@@ -23,6 +26,9 @@ public class XiboService {
     @Inject
     @RestClient
     XiboRestClient xiboRestClient;
+
+    @Inject
+    SessionService sessionService;
 
     @ConfigProperty(name = "on-demand.display-tag")
     Optional<String> displayTags;
@@ -32,7 +38,17 @@ public class XiboService {
 
     public List<Display> getDisplays() {
         String displayTags = this.displayTags.orElse("");
-        return this.xiboRestClient.getDisplays(displayTags);
+        List<Display> displays = this.xiboRestClient.getDisplays(displayTags);
+        for (Map.Entry<UUID, OverlaySession> uuidOverlaySessionEntry : sessionService.sessions.entrySet()) {
+            OverlaySession session = uuidOverlaySessionEntry.getValue();
+            Long displayId = session.displayId;
+            for (Display display : displays) {
+                if (displayId.equals(display.displayId)) {
+                    display.session = session;
+                }
+            }
+        }
+        return displays;
     }
 
     public List<Media> getVideos() {
