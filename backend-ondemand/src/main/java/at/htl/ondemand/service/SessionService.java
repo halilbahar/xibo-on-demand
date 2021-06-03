@@ -61,6 +61,16 @@ public class SessionService {
         return false;
     }
 
+    public boolean deleteSession(String uuid) {
+        OverlaySession session = this.sessions.remove(UUID.fromString(uuid));
+        if (session == null) {
+            return false;
+        }
+
+        SessionService.this.xiboService.deleteLayout(session.layoutId);
+        return true;
+    }
+
     private class SessionTimer implements Runnable {
         @Override
         public void run() {

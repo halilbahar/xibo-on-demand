@@ -94,10 +94,21 @@ public class XiboResource {
     @Path("{uuid}")
     @NoCache
     public Response validateUUID(@PathParam("uuid") String uuidString) {
-        if (this.sessionService.getAndFinishSession(uuidString)) {
-            return Response.noContent().build();
+        if (!this.sessionService.getAndFinishSession(uuidString)) {
+            return Response.status(Response.Status.NOT_FOUND).build();
         }
 
-        return Response.status(Response.Status.NOT_FOUND).build();
+        return Response.noContent().build();
+    }
+
+    @DELETE
+    @Path("{uuid}")
+    @NoCache
+    public Response deleteUUID(@PathParam("uuid") String uuidString) {
+        if (!this.sessionService.deleteSession(uuidString)) {
+            return Response.status(Response.Status.NOT_FOUND).build();
+        }
+
+        return Response.noContent().build();
     }
 }
