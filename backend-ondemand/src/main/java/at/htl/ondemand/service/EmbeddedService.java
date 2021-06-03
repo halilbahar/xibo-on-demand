@@ -2,6 +2,7 @@ package at.htl.ondemand.service;
 
 
 import at.htl.ondemand.model.form.EmbeddedForm;
+import org.eclipse.microprofile.config.inject.ConfigProperty;
 import org.jboss.logging.Logger;
 
 import javax.annotation.PostConstruct;
@@ -20,6 +21,9 @@ public class EmbeddedService {
     @Inject
     Logger log;
 
+    @ConfigProperty(name = "on-demand.api-url")
+    String apiUrl;
+
     @PostConstruct
     public void init() {
         InputStream resourceStream = this.getClass().getResourceAsStream("/on-demand.html");
@@ -30,8 +34,10 @@ public class EmbeddedService {
         this.log.infov("Template html read from resources [{0}]", this.htmlTemplate);
     }
 
-    public EmbeddedForm generateEmbeddedHtml(Long videoId, String duration) {
-        String html = this.htmlTemplate.replace("{{media-id}}", String.valueOf(videoId));
+    public EmbeddedForm generateEmbeddedHtml(Long videoId, String duration, String uuid) {
+        String html = this.htmlTemplate
+                .replace("{{media-id}}", String.valueOf(videoId))
+                .replace("{{url}}", this.apiUrl + "/" + uuid);
         return new EmbeddedForm(html, duration);
     }
 }

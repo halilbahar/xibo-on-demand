@@ -5,6 +5,7 @@ import at.htl.ondemand.model.xibo.Display;
 import at.htl.ondemand.model.xibo.Layout;
 import at.htl.ondemand.model.xibo.Media;
 import at.htl.ondemand.service.EmbeddedService;
+import at.htl.ondemand.service.SessionService;
 import at.htl.ondemand.service.XiboService;
 
 import javax.inject.Inject;
@@ -12,6 +13,7 @@ import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.util.List;
+import java.util.UUID;
 
 @Path("")
 @Consumes(MediaType.APPLICATION_JSON)
@@ -23,6 +25,9 @@ public class XiboResource {
 
     @Inject
     EmbeddedService embeddedService;
+
+    @Inject
+    SessionService sessionService;
 
     @GET
     @Path("display")
@@ -72,13 +77,25 @@ public class XiboResource {
         Layout layout = this.xiboService.createLayout();
 
         // Then create a embedded with the correct video
-        EmbeddedForm embeddedForm = this.embeddedService.generateEmbeddedHtml(videoId, selectedVideo.duration);
+        UUID uuid = UUID.randomUUID();
+        EmbeddedForm embeddedForm = this.embeddedService.generateEmbeddedHtml(videoId, selectedVideo.duration, uuid.toString());
         this.xiboService.createEmbeddedHtml(layout.regions.get(0).regionPlaylist.playlistId, embeddedForm);
         this.xiboService.publishLayout(layout.parentId);
+        this.sessionService.addSession(layout.layoutId, uuid, Integer.valueOf(selectedVideo.duration));
 
         // Finally schedule the overlay
         this.xiboService.scheduleOverlay(layout.campaignId, displayId);
 
         return Response.noContent().build();
+    }
+
+    @GET
+    @Path("{uuid}")
+    public Response validateUUID(@PathParam("uuid") String uuidString) {
+        if (this.sessionService.getAndFinishSession(uuidString)) {
+            return Response.noContent().build();
+        }
+
+        return Response.status(Response.Status.NOT_FOUND).build();
     }
 }
