@@ -52,7 +52,7 @@ public class SessionService {
             // If something got schedule but never got in touch with the server, remove it later
             SessionService.this.sessions.entrySet().removeIf(entry -> entry.getValue().createdAt
                     .plusSeconds(entry.getValue().duration)
-                    .plusMinutes(1)
+                    .plusMinutes(10)
                     .isBefore(now)
             );
 
