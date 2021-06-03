@@ -1,4 +1,9 @@
-<mat-toolbar color="primary">Video on demand</mat-toolbar>
+<mat-toolbar color="primary">
+  <button mat-icon-button class="back-button" *ngIf="(selectedDisplayService.display | async)" (click)="back()">
+    <mat-icon>arrow_back</mat-icon>
+  </button>
+  Video on demand
+</mat-toolbar>
 <div class="router-wrapper">
   <router-outlet></router-outlet>
 </div>
