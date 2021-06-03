@@ -2,6 +2,8 @@ import { ApiService } from 'src/app/core/services/api.service';
 import { Media } from 'src/app/models/media.model';
 
 import { Component, OnInit } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
+import { ScheduleDialogComponent } from 'src/app/components/schedule-dialog/schedule-dialog.component';
 
 @Component({
   selector: 'app-media-list',
@@ -12,7 +14,10 @@ export class MediaListComponent implements OnInit {
 
   videos: Media[] = [];
 
-  constructor(private apiService: ApiService) { }
+  constructor(
+    private apiService: ApiService,
+    private dialog: MatDialog
+  ) { }
 
   ngOnInit(): void {
     this.apiService.getVideos().subscribe(videos => this.videos = videos);
@@ -28,5 +33,9 @@ export class MediaListComponent implements OnInit {
 
 
     return `${minutesString}:${secondsString}`;
+  }
+
+  openScheduleDialog(video: Media): void {
+    this.dialog.open(ScheduleDialogComponent, { data: video, autoFocus: false });
   }
 }

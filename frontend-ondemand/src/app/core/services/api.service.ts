@@ -25,4 +25,8 @@ export class ApiService {
   getVideos(): Observable<Media[]> {
     return this.httpClient.get<Media[]>(`${this.baseUrl}/video`)
   }
+
+  schedule(displayId: number, videoId: number): Observable<void> {
+    return this.httpClient.post<void>(`${this.baseUrl}/schedule/${displayId}/${videoId}`, null);
+  }
 }

@@ -1,1 +1,9 @@
-<p>schedule-dialog works!</p>
+<h2 mat-dialog-title>Schedule now?</h2>
+<mat-dialog-content>
+    Are you sure you want to schedule <strong>{{ video.fileName }}</strong> on the display
+    <strong>{{ display.display }}</strong>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+    <button mat-button mat-dialog-close>Cancel</button>
+    <button mat-button (click)="schedule()">Schedule</button>
+</mat-dialog-actions>

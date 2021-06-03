@@ -1,6 +1,6 @@
 <mat-list role="list">
     <ng-container *ngFor="let video of videos; let i = index">
-        <mat-list-item role="listitem" matRipple>
+        <mat-list-item role="listitem" matRipple (click)="openScheduleDialog(video)">
             <div matLine>{{ video.fileName }}</div>
             <div matLine>{{ formatDuration(video.duration) }}</div>
         </mat-list-item>
