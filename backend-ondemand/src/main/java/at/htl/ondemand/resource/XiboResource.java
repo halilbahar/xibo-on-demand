@@ -44,6 +44,20 @@ public class XiboResource {
         return Response.ok(this.xiboService.getDisplays()).build();
     }
 
+    @DELETE
+    @Path("display/{displayId}")
+    @NoCache
+    public Response deleteUUID(@PathParam("displayId") Long displayId) {
+        UUID uuid = this.sessionService.getdisplayById(displayId);
+        if (uuid == null) {
+            return Response.status(Response.Status.NOT_FOUND).build();
+        }
+
+        this.sessionService.deleteSession(uuid);
+        return Response.noContent().build();
+    }
+
+
     @GET
     @Path("/display/event")
     @Produces(MediaType.SERVER_SENT_EVENTS)
@@ -90,7 +104,7 @@ public class XiboResource {
         }
 
         // Check if the display is occupied
-        if (this.sessionService.isDisplayInSession(displayId)) {
+        if (this.sessionService.getdisplayById(displayId) != null) {
             return Response.status(Response.Status.CONFLICT).build();
         }
 
@@ -116,17 +130,6 @@ public class XiboResource {
     @NoCache
     public Response validateUUID(@PathParam("uuid") String uuidString) {
         if (!this.sessionService.getAndFinishSession(uuidString)) {
-            return Response.status(Response.Status.NOT_FOUND).build();
-        }
-
-        return Response.noContent().build();
-    }
-
-    @DELETE
-    @Path("{uuid}")
-    @NoCache
-    public Response deleteUUID(@PathParam("uuid") String uuidString) {
-        if (!this.sessionService.deleteSession(uuidString)) {
             return Response.status(Response.Status.NOT_FOUND).build();
         }
 

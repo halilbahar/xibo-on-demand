@@ -4,10 +4,10 @@ import at.htl.ondemand.model.DisplayEvent;
 import at.htl.ondemand.model.DisplayEventType;
 import at.htl.ondemand.model.OverlaySession;
 import at.htl.ondemand.model.SessionState;
+import io.smallrye.reactive.messaging.annotations.Broadcast;
 import org.eclipse.microprofile.reactive.messaging.Channel;
 import org.eclipse.microprofile.reactive.messaging.Emitter;
 import org.eclipse.microprofile.reactive.messaging.Incoming;
-import org.eclipse.microprofile.reactive.messaging.Outgoing;
 import org.jboss.logging.Logger;
 
 import javax.annotation.PostConstruct;
@@ -35,7 +35,8 @@ public class SessionService {
     XiboService xiboService;
 
     @Inject
-    @Channel("display-event-emitter")
+    @Channel("display-event")
+    @Broadcast
     Emitter<DisplayEvent> displayEventEmitter;
 
     @PostConstruct
@@ -74,8 +75,13 @@ public class SessionService {
         return false;
     }
 
-    public boolean deleteSession(String uuid) {
-        OverlaySession session = this.sessions.remove(UUID.fromString(uuid));
+    public void removeLayout(OverlaySession session) {
+        this.xiboService.deleteLayout(session.layoutId);
+        this.displayEventEmitter.send(new DisplayEvent(session, DisplayEventType.DELETE));
+    }
+
+    public boolean deleteSession(UUID uuid) {
+        OverlaySession session = this.sessions.remove(uuid);
         if (session == null) {
             return false;
         }
@@ -84,25 +90,18 @@ public class SessionService {
         return true;
     }
 
-    public void removeLayout(OverlaySession session) {
-        this.xiboService.deleteLayout(session.layoutId);
-        this.displayEventEmitter.send(new DisplayEvent(session, DisplayEventType.DELETE));
-    }
-
-    public boolean isDisplayInSession(Long displayId) {
+    public UUID getdisplayById(Long displayId) {
         for (Map.Entry<UUID, OverlaySession> uuidOverlaySessionEntry : this.sessions.entrySet()) {
             if (uuidOverlaySessionEntry.getValue().displayId.equals(displayId)) {
-                return true;
+                return uuidOverlaySessionEntry.getKey();
             }
         }
 
-        return false;
+        return null;
     }
 
-    @Incoming("display-event-emitter")
-    @Outgoing("display-event")
-    public DisplayEvent processEvent(DisplayEvent event) {
-        return event;
+    @Incoming("display-event")
+    public void processEvent(DisplayEvent event) {
     }
 
     private class SessionTimer implements Runnable {
