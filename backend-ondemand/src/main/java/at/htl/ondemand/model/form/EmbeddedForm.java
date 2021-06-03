@@ -19,6 +19,10 @@ public class EmbeddedForm {
     @PartType(MediaType.TEXT_PLAIN)
     public String useDuration = "1";
 
+    @FormParam("transparency")
+    @PartType(MediaType.TEXT_PLAIN)
+    public String transparency = "1";
+
     public EmbeddedForm(String html, String duration) {
         this.html = html;
         this.duration = duration;
