@@ -1,8 +1,9 @@
+import { Subscription } from 'rxjs';
 import { ApiService } from 'src/app/core/services/api.service';
 import { SelectedDisplayService } from 'src/app/core/services/selected-display.service';
 import { Display } from 'src/app/models/display.model';
 
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 
 @Component({
@@ -10,9 +11,10 @@ import { Router } from '@angular/router';
   templateUrl: './display-list.component.html',
   styleUrls: ['./display-list.component.scss']
 })
-export class DisplayListComponent implements OnInit {
+export class DisplayListComponent implements OnInit, OnDestroy {
 
   displays: Display[] = [];
+  displayEventSubscription: Subscription;
 
   constructor(
     private apiService: ApiService,
@@ -21,7 +23,30 @@ export class DisplayListComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
+    this.displayEventSubscription = this.apiService
+      .getDisplayEvents()
+      .subscribe((event) => {
+        if (event.type === 'DELETE') {
+          for (const display of this.displays) {
+            if (display.displayId === event.session.displayId) {
+              display.session = null;
+            }
+          }
+        } else {
+          for (const display of this.displays) {
+            if (display.displayId === event.session.displayId) {
+              display.session = event.session;
+              break;
+            }
+          }
+        }
+
+      });
     this.apiService.getDisplays().subscribe(displays => this.displays = displays);
+  }
+
+  ngOnDestroy(): void {
+    this.displayEventSubscription.unsubscribe();
   }
 
   selectDisplay(display: Display): void {
