@@ -82,7 +82,7 @@ public class XiboResource {
         EmbeddedForm embeddedForm = this.embeddedService.generateEmbeddedHtml(videoId, selectedVideo.duration, uuid.toString());
         this.xiboService.createEmbeddedHtml(layout.regions.get(0).regionPlaylist.playlistId, embeddedForm);
         this.xiboService.publishLayout(layout.parentId);
-        this.sessionService.addSession(layout.layoutId, uuid, Integer.valueOf(selectedVideo.duration));
+        this.sessionService.addSession(layout.layoutId, displayId, uuid, Integer.valueOf(selectedVideo.duration));
 
         // Finally schedule the overlay
         this.xiboService.scheduleOverlay(layout.campaignId, displayId);

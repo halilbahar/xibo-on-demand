@@ -20,7 +20,7 @@ import java.util.stream.Collectors;
 @Singleton
 public class SessionService {
 
-    private final Map<UUID, OverlaySession> sessions = new ConcurrentHashMap<>();
+    final Map<UUID, OverlaySession> sessions = new ConcurrentHashMap<>();
 
     @Inject
     volatile Logger log;
@@ -35,8 +35,8 @@ public class SessionService {
         executor.scheduleAtFixedRate(new SessionTimer(), 0, 1, TimeUnit.SECONDS);
     }
 
-    public void addSession(Long layoutId, UUID uuid, Integer duration) {
-        this.sessions.put(uuid, new OverlaySession(layoutId, duration));
+    public void addSession(Long layoutId, Long displayId, UUID uuid, Integer duration) {
+        this.sessions.put(uuid, new OverlaySession(layoutId, displayId, duration));
     }
 
     public boolean getAndFinishSession(String uuidString) {
