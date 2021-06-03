@@ -9,7 +9,13 @@ This docker compose will reduce the time of setting up a development environment
 
 == Media
 
-* `example.mp4`
+* `example.mp4` with the tag `on-demand`
+* `example2.mp4`
+* `sample-mp4-file.mp4` with the tag `on-demand`
+
+== Displays
+
+* `Display` with the tag `on-demand-display`
 
 == Update the state
 To update the state of the preconfigured xibo you have to first make your changes and after that do the following:
