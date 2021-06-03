@@ -1,13 +1,14 @@
 import { HttpClientModule } from '@angular/common/http';
 import { APP_INITIALIZER, NgModule } from '@angular/core';
+import { MatToolbarModule } from '@angular/material/toolbar';
 import { BrowserModule } from '@angular/platform-browser';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { ConfigService } from './core/services/config.service';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { MediaListComponent } from './pages/media-list/media-list.component';
 import { DisplayListComponent } from './pages/display-list/display-list.component';
+import { MediaListComponent } from './pages/media-list/media-list.component';
 
 @NgModule({
   declarations: [
@@ -19,7 +20,8 @@ import { DisplayListComponent } from './pages/display-list/display-list.componen
     BrowserModule,
     AppRoutingModule,
     HttpClientModule,
-    BrowserAnimationsModule
+    BrowserAnimationsModule,
+    MatToolbarModule
   ],
   providers: [
     {
