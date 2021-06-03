@@ -1,5 +1,6 @@
 package at.htl.ondemand.resource;
 
+import at.htl.ondemand.model.DisplayEvent;
 import at.htl.ondemand.model.form.EmbeddedForm;
 import at.htl.ondemand.model.xibo.Display;
 import at.htl.ondemand.model.xibo.Layout;
@@ -7,7 +8,10 @@ import at.htl.ondemand.model.xibo.Media;
 import at.htl.ondemand.service.EmbeddedService;
 import at.htl.ondemand.service.SessionService;
 import at.htl.ondemand.service.XiboService;
+import org.eclipse.microprofile.reactive.messaging.Channel;
+import org.jboss.resteasy.annotations.SseElementType;
 import org.jboss.resteasy.annotations.cache.NoCache;
+import org.reactivestreams.Publisher;
 
 import javax.inject.Inject;
 import javax.ws.rs.*;
@@ -30,10 +34,22 @@ public class XiboResource {
     @Inject
     SessionService sessionService;
 
+    @Inject
+    @Channel("display-event")
+    Publisher<DisplayEvent> displayEvents;
+
     @GET
     @Path("display")
     public Response getDisplays() {
         return Response.ok(this.xiboService.getDisplays()).build();
+    }
+
+    @GET
+    @Path("/display/event")
+    @Produces(MediaType.SERVER_SENT_EVENTS)
+    @SseElementType(MediaType.APPLICATION_JSON)
+    public Publisher<DisplayEvent> stream() {
+        return this.displayEvents;
     }
 
     @GET

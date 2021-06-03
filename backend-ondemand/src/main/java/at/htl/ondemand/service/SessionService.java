@@ -1,7 +1,11 @@
 package at.htl.ondemand.service;
 
+import at.htl.ondemand.model.DisplayEvent;
+import at.htl.ondemand.model.DisplayEventType;
 import at.htl.ondemand.model.OverlaySession;
 import at.htl.ondemand.model.SessionState;
+import org.eclipse.microprofile.reactive.messaging.Channel;
+import org.eclipse.microprofile.reactive.messaging.Emitter;
 import org.jboss.logging.Logger;
 
 import javax.annotation.PostConstruct;
@@ -28,15 +32,20 @@ public class SessionService {
     @Inject
     XiboService xiboService;
 
+    @Inject
+    @Channel("display-event")
+    Emitter<DisplayEvent> displayEventEmitter;
+
     @PostConstruct
     void init() {
-        System.out.println("this is bad if seen twice");
         ScheduledExecutorService executor = Executors.newScheduledThreadPool(1);
         executor.scheduleAtFixedRate(new SessionTimer(), 0, 1, TimeUnit.SECONDS);
     }
 
     public void addSession(Long layoutId, Long displayId, UUID uuid, Integer duration) {
-        this.sessions.put(uuid, new OverlaySession(layoutId, displayId, duration));
+        OverlaySession session = new OverlaySession(layoutId, displayId, duration);
+        this.sessions.put(uuid, session);
+        this.displayEventEmitter.send(new DisplayEvent(session, DisplayEventType.CHANGE));
     }
 
     public boolean getAndFinishSession(String uuidString) {
@@ -50,12 +59,14 @@ public class SessionService {
         // This is the first request from the player. After this the player is playing the video
         if (overlaySession.state == SessionState.INITIAL) {
             overlaySession.state = SessionState.STARTED;
+            this.displayEventEmitter.send(new DisplayEvent(overlaySession, DisplayEventType.CHANGE));
             return true;
         }
 
         // If the player requests again after initial he will be started or finished. Either way he should not play again
         if (overlaySession.state == SessionState.STARTED) {
             overlaySession.state = SessionState.FINISHED;
+            this.displayEventEmitter.send(new DisplayEvent(overlaySession, DisplayEventType.CHANGE));
         }
 
         return false;
@@ -67,8 +78,13 @@ public class SessionService {
             return false;
         }
 
-        SessionService.this.xiboService.deleteLayout(session.layoutId);
+        this.removeLayout(session);
         return true;
+    }
+
+    public void removeLayout(OverlaySession session) {
+        this.xiboService.deleteLayout(session.layoutId);
+        this.displayEventEmitter.send(new DisplayEvent(session, DisplayEventType.DELETE));
     }
 
     private class SessionTimer implements Runnable {
@@ -86,7 +102,7 @@ public class SessionService {
                         .plusMinutes(10)
                         .isBefore(now)) {
                     iterator.remove();
-                    SessionService.this.xiboService.deleteLayout(overlaySession.layoutId);
+                    SessionService.this.removeLayout(overlaySession);
                 }
             }
 
