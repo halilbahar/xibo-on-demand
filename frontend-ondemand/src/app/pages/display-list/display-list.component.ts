@@ -30,4 +30,8 @@ export class DisplayListComponent implements OnInit {
       this.router.navigate(['media']);
     }
   }
+
+  removeSchedule(display: Display): void {
+    this.apiService.deleteSchedule(display.uuid).subscribe();
+  }
 }

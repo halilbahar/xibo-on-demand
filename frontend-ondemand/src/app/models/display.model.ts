@@ -5,4 +5,5 @@ export interface Display {
     display: string;
     loggedIn: number;
     session?: Session;
+    uuid?: string;
 }

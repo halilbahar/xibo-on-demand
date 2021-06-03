@@ -29,4 +29,8 @@ export class ApiService {
   schedule(displayId: number, videoId: number): Observable<void> {
     return this.httpClient.post<void>(`${this.baseUrl}/schedule/${displayId}/${videoId}`, null);
   }
+
+  deleteSchedule(uuid: string): Observable<void> {
+    return this.httpClient.delete<void>(`${this.baseUrl}/${uuid}`);
+  }
 }

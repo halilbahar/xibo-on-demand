@@ -7,5 +7,12 @@
 
   .grid-item {
     height: 125px;
+    position: relative;
+
+    .clear-icon {
+      position: absolute;
+      top: 0;
+      right: 0;
+    }
   }
 }

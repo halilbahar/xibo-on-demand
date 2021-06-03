@@ -1,6 +1,10 @@
 <div class="display-grid">
     <mat-card class="grid-item" *ngFor="let display of displays" (click)="selectDisplay(display)" matRipple
         [matRippleDisabled]="display.session != null">
+        <button mat-icon-button *ngIf="display.session != null" class="clear-icon" color="warn"
+            (click)="removeSchedule(display)">
+            <mat-icon>clear</mat-icon>
+        </button>
         <mat-card-header>
             <mat-card-title>{{ display.display }}</mat-card-title>
         </mat-card-header>
