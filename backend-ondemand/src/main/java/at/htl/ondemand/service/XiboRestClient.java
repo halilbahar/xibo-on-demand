@@ -45,6 +45,11 @@ public interface XiboRestClient {
     @XiboAuthentication
     Layout createLayout(@MultipartForm LayoutForm data);
 
+    @DELETE
+    @Path("layout/{layoutId}")
+    @XiboAuthentication
+    void deleteLayout(@PathParam("layoutId") Long LayoutId);
+
     @PUT
     @Path("layout/publish/{layoutId}")
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)

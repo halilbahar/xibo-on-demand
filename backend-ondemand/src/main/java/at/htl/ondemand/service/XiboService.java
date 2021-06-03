@@ -46,6 +46,10 @@ public class XiboService {
         return this.xiboRestClient.getChildLayout(layout.layoutId, "regions,playlists,widgets").get(0);
     }
 
+    public void deleteLayout(Long layoutId) {
+        this.xiboRestClient.deleteLayout(layoutId);
+    }
+
     public void publishLayout(Long layoutId) {
         this.xiboRestClient.publishLayout(layoutId, 1);
     }
