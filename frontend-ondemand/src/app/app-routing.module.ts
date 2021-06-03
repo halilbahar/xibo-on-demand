@@ -5,8 +5,8 @@ import { DisplayListComponent } from './pages/display-list/display-list.componen
 import { MediaListComponent } from './pages/media-list/media-list.component';
 
 const routes: Routes = [
-  { path: '', component: MediaListComponent },
-  { path: 'display', component: DisplayListComponent },
+  { path: '', component: DisplayListComponent },
+  { path: 'media', component: MediaListComponent },
   { path: '**', redirectTo: '/', pathMatch: 'full' }
 ];
 

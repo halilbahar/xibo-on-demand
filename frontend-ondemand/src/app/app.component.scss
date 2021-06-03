@@ -7,8 +7,6 @@
     flex: 1;
 
     ::ng-deep router-outlet + * {
-      display: flex;
-      flex-direction: column;
       height: 100%;
     }
   }

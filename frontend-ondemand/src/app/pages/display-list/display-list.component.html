@@ -1,1 +1,5 @@
-<p>display-list works!</p>
+<mat-card class="grid-item" *ngFor="let display of displays" matRipple>
+  <mat-card-header>
+    <mat-card-title>{{ display.display }}</mat-card-title>
+  </mat-card-header>
+</mat-card>
