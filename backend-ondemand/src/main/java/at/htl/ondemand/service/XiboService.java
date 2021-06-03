@@ -45,6 +45,7 @@ public class XiboService {
             for (Display display : displays) {
                 if (displayId.equals(display.displayId)) {
                     display.session = session;
+                    display.uuid = uuidOverlaySessionEntry.getKey();
                 }
             }
         }
