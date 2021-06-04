@@ -77,4 +77,4 @@ jobs:
           push: true
           tags: |
             docker.pkg.github.com/${{ github.repository }}/backend-on-demand:${{ github.sha }}
-            docker.pkg.github.com/${{ github.repository }}/backend-on-demand:${{ github.ref }}
+            docker.pkg.github.com/${{ github.repository }}/backend-on-demand:${{ GITHUB_REF##*/ }}
