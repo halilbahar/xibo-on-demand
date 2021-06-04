@@ -1,0 +1,20 @@
+version: "3"
+services:
+  frontend:
+    image: ghcr.io/halilbahar/xibo-on-demand/frontend:1.0.0
+    environment:
+      ON_DEMAND_API_URL: ${API_URL}
+    ports:
+      - 80:80
+  backend:
+    image: ghcr.io/halilbahar/xibo-on-demand/backend:1.0.0
+    environment:
+      ON_DEMAND_MEDIA_TAG: ${MEDIA_TAG}
+      ON_DEMAND_DISPLAY_TAG: ${DISPLAY_TAG}
+      ON_DEMAND_PRIORITY: ${PRIORITY}
+      ON_DEMAND_API_URL: ${API_URL}
+      ON_DEMAND_XIBO_URL: ${XIBO_URL}
+      ON_DEMAND_XIBO_CLIENT-ID: ${XIBO_CLIENT_ID}
+      ON_DEMAND_XIBO_CLIENT-SECRET: ${XIBO_CLIENT_SECRET}
+    ports:
+      - 8080:8080
