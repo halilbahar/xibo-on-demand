@@ -8,3 +8,37 @@ This way you don't have to schedule something if you want to show something once
 On the frontend you have to ability to select a display and a video and it gets schedule. The backend creates a layout with 1 region and 1 `embedded` widget and in that embedded is a html page with a `uuid`. This html page requests instantly to the backend. This way the backend knows that the video started and can distinguish between multiple requests as all of them have a unique `uuid`. When the page request for the second time (either at the end of the video or on the second itteration) the backend deletes the layout thus deleting it from the schedule calender.
 
 With this solution the videos will be shown smoothly and without refreshing at the beginnen.
+
+== Deployment
+
+This repository provides 2 images: `xibo-on-demand/frontend` and `xibo-on-demand/backend`. All you need are these 2. To simplify this process of deployment you can use the preconfigured `docker-compose` deployment in the `deployment/` folder. In there you need to create a `.env` file. Use the `.env.example` for this:
+
+[source,bash]
+....
+cp .env.example .env
+....
+
+Here you have 6 `environment` variables that you can and must change:
+
+* `MEDIA_TAG` is used for querying only videos with the specified `tag`. Leave empty to get all videos (is not recommended as this will make the app confusing).
+* `DISPLAY_TAG` is used for querying only displays with the specified `tag`. Leave empty to get all displays (same as above).
+* `PRIORITY` sets the priority of the `overlay layout`.
+* `API_URL` is the url of your backend server. Provide the reachable ip of the running machine.
+* `XIBO_URL` is the url of your xibo server. Again provide the reachable ip of the xibo machine.
+* `XIBO_CLIENT_ID` is the `client id` of the xibo-application.
+* `XIBO_CLIENT_SECRET` is the `client secret` of the xibo-application.
+
+=== Xibo configuration
+
+First of all create an application:
+
+* Go to `Applications` and `Add Application`
+* The name should be `xibo-on-demand`
+* Then edit the application
+* Copy the `client id` and `client secret` to the `.env` file
+* Set `Client Credentials?` to true
+* Go to the `Permissions` tab and set `All` to true
+
+xibo-on-demands needs the `xmr` to work. Set your `XMR Public Address` up at `Settings` -> `Displays`.
+
+If a display is not using refreshing that means the display is not using the new `xmr`. To make it use the new address go to `Displays`. Edit the `display` that is not working. Go to the `Advanced` tab and set the `Reconfigure XMR` to true. After the next refresh the `display` should work.
