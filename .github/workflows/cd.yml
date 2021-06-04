@@ -41,7 +41,7 @@ jobs:
           push: true
           tags: |
             docker.pkg.github.com/${{ github.repository }}/frontend-on-demand:${{ github.sha }}
-            docker.pkg.github.com/${{ github.repository }}/frontend-on-demand:${{ github.ref }}
+            docker.pkg.github.com/${{ github.repository }}/frontend-on-demand:${{ GITHUB_REF##*/ }}
   build_backend:
     runs-on: ubuntu-latest
     defaults:
