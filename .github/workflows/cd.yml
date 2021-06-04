@@ -78,7 +78,7 @@ jobs:
       - name: Build container image
         uses: docker/build-push-action@v2
         with:
-          file: backend-on-demand/src/main/docker/Dockerfile.native
+          file: ./backend-on-demand/src/main/docker/Dockerfile.native
           context: ./backend-on-demand
           push: true
           tags: |
