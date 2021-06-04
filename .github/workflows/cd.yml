@@ -2,7 +2,7 @@ name: On Demand CD
 
 on:
   push:
-    tags: [ '*' ]
+    tags: ["*"]
 
 jobs:
   build_frontend:
@@ -43,7 +43,7 @@ jobs:
           context: ./frontend-on-demand
           push: true
           tags: |
-            docker.pkg.github.com/${{ github.repository }}/frontend-on-demand:${{ env.RELEASE_VERSION }}
+            ghcr.io/${{ github.repository }}/frontend-on-demand:${{ env.RELEASE_VERSION }}
   build_backend:
     runs-on: ubuntu-latest
     defaults:
@@ -82,4 +82,4 @@ jobs:
           context: ./backend-on-demand
           push: true
           tags: |
-            docker.pkg.github.com/${{ github.repository }}/backend-on-demand:${{ env.RELEASE_VERSION }}
+            ghcr.io/${{ github.repository }}/backend-on-demand:${{ env.RELEASE_VERSION }}
