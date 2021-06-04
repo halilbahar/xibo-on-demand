@@ -40,6 +40,7 @@ jobs:
       - name: Build container image
         uses: docker/build-push-action@v2
         with:
+          context: ./frontend-on-demand
           push: true
           tags: |
             docker.pkg.github.com/${{ github.repository }}/frontend-on-demand:${{ github.sha }}
@@ -78,6 +79,8 @@ jobs:
       - name: Build container image
         uses: docker/build-push-action@v2
         with:
+          file: backend-on-demand/src/main/docker/Dockerfile.native
+          context: ./frontend-on-demand
           push: true
           tags: |
             docker.pkg.github.com/${{ github.repository }}/backend-on-demand:${{ github.sha }}
