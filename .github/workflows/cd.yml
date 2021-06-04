@@ -29,6 +29,8 @@ jobs:
         run: npm ci
       - name: Build the frontend
         run: npm run build
+      - name: Set release version
+        run: echo "RELEASE_VERSION=${GITHUB_REF#refs/*/}" >> $GITHUB_ENV
       - name: Log in to GitHub Docker Registry
         uses: docker/login-action@v1
         with:
@@ -41,7 +43,7 @@ jobs:
           push: true
           tags: |
             docker.pkg.github.com/${{ github.repository }}/frontend-on-demand:${{ github.sha }}
-            docker.pkg.github.com/${{ github.repository }}/frontend-on-demand:${{ GITHUB_REF##*/ }}
+            docker.pkg.github.com/${{ github.repository }}/frontend-on-demand:${{ env.RELEASE_VERSION }}
   build_backend:
     runs-on: ubuntu-latest
     defaults:
@@ -64,7 +66,9 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-maven-
       - name: Build backend
-        run: ./mvnw -DskipTests -B package -Pnative 
+        run: ./mvnw -DskipTests -B package -Pnative
+      - name: Set release version
+        run: echo "RELEASE_VERSION=${GITHUB_REF#refs/*/}" >> $GITHUB_ENV
       - name: Log in to GitHub Docker Registry
         uses: docker/login-action@v1
         with:
@@ -77,4 +81,4 @@ jobs:
           push: true
           tags: |
             docker.pkg.github.com/${{ github.repository }}/backend-on-demand:${{ github.sha }}
-            docker.pkg.github.com/${{ github.repository }}/backend-on-demand:${{ GITHUB_REF##*/ }}
+            docker.pkg.github.com/${{ github.repository }}/backend-on-demand:${{ env.RELEASE_VERSION }}
